@@ -285,6 +285,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg0);color:var(--text0);f
           <div id="dp-sub">Toque nos itens para marcar</div>
         </div>
         <div id="btn-reset" onclick="resetChecks()">↺ Resetar</div>
+        <div id="btn-print" onclick="imprimirHoje()" style="font-size:10px;color:var(--text2);cursor:pointer;padding:4px 8px;border-radius:6px;border:1px solid var(--bg3);background:rgba(192,57,43,.1);color:#EF9A9A;">🖨️ PDF</div>
       </div>
       <div id="hoje-lista"></div>
     </div>
@@ -467,37 +468,32 @@ const INICIO = new Date(2026,1,23); // 23/02/2026
 const FIM    = new Date(2026,7,23); // 23/08/2026
 
 const ROTINA = [
-  ["05:15","☕","Fórmula Cafeína 420mg + Cromo 800mcg","1 cápsula · JEJUM","SEMPRE","pre"],
-  ["06:00","🍽️","Pré-treino — Arroz 80g + Frango 80g + Abóbora 60g","264 kcal · 27,8g P","SEMPRE","refeicao"],
-  ["06:30","☕","Fórmula Cafeína 420mg + Cromo 800mcg","1 cápsula · 30 min pré-treino","SEMPRE","pre"],
-  ["06:30","🚨","MEDIR PRESSÃO ARTERIAL","Registrar mmHg · >140/90 = reduzir cafeína","SEMPRE","alerta"],
-  ["07:00","🏋️","TREINO + Cardio Zona 2 (4×/sem)","60 min treino · 40 min cardio","SEMPRE","treino"],
-  ["08:30","💪","Whey Protein","1 scoop (35g) · IMEDIATO pós-treino","SEMPRE","supl"],
-  ["08:30","🍚","Arroz 80g + Feijão 60g","269 kcal · 29g P","SEMPRE","refeicao"],
-  ["08:30","💉","Adipotide FTPP — SC abdominal","500mcg · 0,1mL · jejum","SEM_21_25","inj"],
-  ["09:30","💈","Minoxidil 5% — 1ª aplicação","1 mL · couro cabeludo seco","SEMPRE","capilar"],
-  ["10:00","🍳","Café Manhã — Ovos + Feijão + Abóbora + Pão + Manteiga","527 kcal · 27,9g P","SEMPRE","refeicao"],
-  ["10:00","🐟","Ômega 3 — 1ª dose","2 cápsulas (2g)","SEMPRE","supl"],
-  ["10:00","☀️","Vitamina D3","1 cápsula (2.000 UI)","SEMPRE","supl"],
-  ["10:00","🌿","Berberina — 1ª dose","1 cápsula (500mg)","SEMPRE","supl"],
-  ["10:00","💉","Oxytocina — SC abdominal","50mcg · 0,025mL","SEM_12_25","inj"],
-  ["10:00","🔵","LGD-4033 + S-4 Andarine","LGD 10mg + S-4 25mg","LGD","sarm"],
-  ["10:00","🟣","RAD-150","7,5mg (1 cápsula)","RAD","sarm"],
-  ["10:00","⚠️","YK-11","20mg (2 cáps × 10mg)","YK11","sarm"],
+  ["04:45","☕","Fórmula Cafeína 420mg + Cromo 800mcg","1 cápsula · JEJUM","SEMPRE","pre"],
+  ["05:15","🍽️","Pré-treino — Arroz 80g + Frango 80g + Abóbora 60g","264 kcal · 27,8g P","SEMPRE","refeicao"],
+  ["05:30","☕","Fórmula Cafeína 420mg + Cromo 800mcg","1 cápsula · 30 min pré-treino","SEMPRE","pre"],
+  ["05:30","🔥","Clembuter Under Labz — Termogênico líquido","5 mL · seringa · substitui 2ª cafeína (200mg)","SEMPRE","pre"],
+  ["05:30","🏃","X-Carnitine Under Labz — L-Carnitina 2.000mg","10 mL · seringa + Cromo","SEMPRE","supl"],
+  ["05:30","🚨","MEDIR PRESSÃO ARTERIAL","Registrar mmHg · >140/90 = reduzir cafeína","SEMPRE","alerta"],
+  ["06:00","🏋️","TREINO + Cardio (06:00–09:00)","180 min · treino + cardio incluso","SEMPRE","treino"],
+  ["09:30","💪","Whey Protein","1 scoop (35g) · IMEDIATO pós-treino","SEMPRE","supl"],
+  ["09:30","🍚","Arroz 80g + Feijão 60g","269 kcal · 29g P","SEMPRE","refeicao"],
+  ["10:00","💈","Minoxidil 5% — 1ª aplicação","1 mL · couro cabeludo seco","SEMPRE","capilar"],
+  ["10:30","🍳","Café da Manhã — Ovos + Feijão + Abóbora + Pão + Manteiga","527 kcal · 27,9g P","SEMPRE","refeicao"],
+  ["10:30","🐟","Ômega 3 — 1ª dose · Vitamina D3 · Berberina 1ª","Ômega 2g+2g · D3 2000UI · Berb 500mg","SEMPRE","supl"],
+  ["10:30","💊","NAC (Hepatoprotetor)","600mg base / 1200mg nos blocos","SEMPRE","supl"],
+  ["10:30","🔵","LGD-4033 + S-4 Andarine","LGD 10mg + S-4 25mg","LGD","sarm"],
+  ["10:30","🟣","RAD-150","7,5mg (1 cápsula)","RAD","sarm"],
+  ["10:30","⚠️","YK-11","20mg (2 cáps × 10mg)","YK11","sarm"],
+  ["10:30","💊","Tamoxifeno (Citrato) 10mg","1 comprimido · com refeição · desconforto mamário","SEM_15_25","supl"],
   ["13:00","🥩","Almoço — Patinho + Arroz + Feijão + Abóbora + Azeite","670 kcal · 59,4g P","SEMPRE","refeicao"],
-  ["13:00","💊","NAC (Hepatoprotetor)","600mg base / 1200mg nos blocos","SEMPRE","supl"],
-  ["13:00","💪","BCAA","10g","SEMPRE","supl"],
-  ["13:00","⚡","Creatina Monoidratada","5g · com a refeição","SEMPRE","supl"],
-  ["13:00","🐟","Ômega 3 — 2ª dose","2 cápsulas (2g)","SEMPRE","supl"],
-  ["16:30","☕","Café da Tarde — Pão 40g + Café preto","110 kcal","SEMPRE","refeicao"],
-  ["16:30","🌿","Berberina — 2ª dose","1 cápsula (500mg)","SEMPRE","supl"],
-  ["19:30","🍗","Jantar — Frango + Abóbora + Feijão + Azeite","482 kcal · 57,4g P","SEMPRE","refeicao"],
-  ["19:30","💪","L-Glutamina","5g (pó com água)","SEMPRE","supl"],
-  ["19:30","🌙","ZMA (Zinco + Magnésio + B6)","1 dose · estômago vazio","SEMPRE","supl"],
-  ["21:00","💈","Minoxidil 5% — 2ª + RU58841 50mg","1 mL + 50mg · tópico","SEMPRE","capilar"],
-  ["22:30","💉","HGH Fragment 176-191 — SC abdominal","250mcg · 0,1mL · JEJUM 2h+","SEM_18_20","inj"],
-  ["23:00","💉","CJC-1295 + Ipamorelin — SC abdominal","100mcg cada · 0,08mL · JEJUM","SEM_12_21","inj"],
-  ["Seg+Qui","💉","Durateston 0,2mL + Primobolan 0,5mL — IM glúteo","0,7 mL total · mesma seringa 3mL · 23G×1½\"","SEG_QUI","inj"],
+  ["13:00","💊","BCAA 10g · Creatina 5g · Ômega 3 2ª dose","BCAA 10g · Creatina 5g · Ômega 2g","SEMPRE","supl"],
+  ["16:00","☕","Café da Tarde — Pão 40g + Café preto","110 kcal","SEMPRE","refeicao"],
+  ["16:00","🌿","Berberina — 2ª dose","1 cápsula (500mg)","SEMPRE","supl"],
+  ["19:00","🍗","Jantar — Frango + Abóbora + Feijão + Azeite","482 kcal · 57,4g P","SEMPRE","refeicao"],
+  ["19:00","🌙","L-Glutamina 5g · ZMA","Glut 5g + ZMA 1 dose · estômago vazio","SEMPRE","supl"],
+  ["20:30","💈","Minoxidil 5% — 2ª + RU58841 50mg","1 mL + 50mg · tópico","SEMPRE","capilar"],
+  ["Seg+Qui","💉","Durateston 0,5mL — IM glúteo","Durateston 125mg · 0,5mL · seringa 3mL · 23G 1.5","SEG_QUI","inj"],
+  ["Seg/Qua/Sex","💉","hCG 250-500 UI — SC abdominal","Preserva testiculo unico · mimetiza LH · CONTINUO · 3x/sem","SEMPRE","inj"],
   ["3×/sem","💈","Ketoconazol 2% — escalpo 5 min","Anti-DHT tópico","SEMPRE","capilar"],
 ];
 
@@ -921,6 +917,77 @@ applyConfigToFields();
 // Aplicar config salva à aba HOJE na inicialização
 setTimeout(()=>{ atualizarDosesHoje(loadConfig()); }, 100);
 
+
+// ── IMPRESSÃO / PDF ──────────────────────────────────────────────────────────
+function imprimirHoje(){
+  // Criar janela de impressão com os itens ativos
+  const sem = getSemAtual();
+  const now = new Date();
+  const dow = now.getDay(); // 0=dom,1=seg
+  const isSegQui = (dow===1||dow===4);
+  const isSegQuaSex = (dow===1||dow===3||dow===5);
+  const diasSem = ['Domingo','Segunda','Terca','Quarta','Quinta','Sexta','Sabado'];
+
+  const ativos = ROTINA.filter(([h,e,p,d,tag,cat])=>isAtivo(tag,sem,isSegQui));
+
+  let grupos = {};
+  ativos.forEach(([h,e,p,d,tag,cat])=>{
+    if(!grupos[h]) grupos[h]=[];
+    grupos[h].push({h,e,p,d,cat});
+  });
+
+  const corCat = {
+    inj:'#4A235A', alerta:'#922B21', treino:'#1F3864',
+    refeicao:'#1F6B42', supl:'#0D47A1', capilar:'#4A235A',
+    pre:'#B45309', sarm:'#2980B9'
+  };
+
+  let rows = '';
+  Object.entries(grupos).forEach(([hora,items])=>{
+    rows += `<tr class="sep"><td colspan="3">${hora}</td></tr>`;
+    items.forEach(({h,e,p,d,cat})=>{
+      const cor = corCat[cat]||'#333';
+      rows += `<tr>
+        <td class="hora" style="color:white;background:${cor}">${h}</td>
+        <td class="prod" style="color:${cor}">${e} ${p}</td>
+        <td class="dose">${d}</td>
+      </tr>`;
+    });
+  });
+
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
+  <title>Agenda ${now.toLocaleDateString('pt-BR')}</title>
+  <style>
+    body{font-family:Arial,sans-serif;font-size:9pt;margin:1cm}
+    h2{font-size:13pt;margin:0;color:#0D1B2A}
+    .sub{font-size:8pt;color:#00C896;margin-bottom:8px}
+    table{width:100%;border-collapse:collapse}
+    tr.sep td{background:#1F3864;color:white;font-weight:bold;
+              font-size:9pt;padding:3px 6px}
+    td{padding:3px 6px;border-bottom:1px solid #eee;vertical-align:middle}
+    td.hora{width:80px;font-size:8pt;font-weight:bold;text-align:center}
+    td.prod{font-size:8.5pt;font-weight:bold;width:55%}
+    td.dose{font-size:7.5pt;color:#555}
+    .footer{margin-top:8px;padding:5px;background:#FFF3E0;
+            font-size:7pt;color:#B71C1C;border:1px solid #FFCDD2}
+    .kcal{margin-top:4px;padding:4px;background:#E3F2FD;
+          font-size:7.5pt;color:#1F3864;text-align:center}
+    @media print{body{margin:0.5cm}}
+  </style></head><body>
+  <h2>AGENDA DO DIA — TRT PROTOCOLO v10</h2>
+  <div class="sub">${now.toLocaleDateString('pt-BR')} (${diasSem[dow]})  ·  Semana ${sem}/25  ·  Restam ${Math.max(0,Math.floor((new Date(2026,7,23)-now)/86400000))} dias${isSegQui?' · 💉 DIA DE INJECAO':''}${isSegQuaSex?' · 💉 hCG HOJE':''}</div>
+  <table>${rows}</table>
+  <div class="footer">ALERTAS: PA>140/90 reduzir cafeina  |  TGP>120 (YK-11) PARAR  |  Ht>52% doacao de sangue</div>
+  <div class="kcal"><b>1.778 kcal</b>  ·  Proteina: 184g  ·  Carboidrato: 164g  ·  Gordura: 50g</div>
+  </body></html>`;
+
+  const w = window.open('','_blank','width=800,height=900');
+  w.document.write(html);
+  w.document.close();
+  setTimeout(()=>w.print(), 500);
+}
+
 </script>
 </body>
 </html>
+
