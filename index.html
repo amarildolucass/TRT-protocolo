@@ -550,6 +550,7 @@ function getDiaCorrido(){
 }
 
 function isAtivo(tag, sem, isSegQui){
+  const dow=new Date().getDay();
   switch(tag){
     case 'SEMPRE': return true;
     case 'SEG_QUI': return isSegQui;
@@ -560,6 +561,8 @@ function isAtivo(tag, sem, isSegQui){
     case 'SEM_12_21': return sem>=12&&sem<=21;
     case 'SEM_12_25': return sem>=12&&sem<=25;
     case 'SEM_18_20': return sem>=18&&sem<=20;
+    case 'SEM_15_25': return sem>=15&&sem<=25;
+    case 'SEG_QUA_SEX': return (dow===1||dow===3||dow===5);
     case 'SEM_21_25': return sem>=21&&sem<=25;
     default: return false;
   }
