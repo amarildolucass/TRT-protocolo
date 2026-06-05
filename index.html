@@ -4,10 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#0D1B2A">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="TRT Proto">
-<title>TRT Protocolo v10</title>
+<title>TRT Protocolo v10.1</title>
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -486,10 +489,12 @@ const ROTINA = [
   ["10:30","⚠️","YK-11","20mg (2 cáps × 10mg)","YK11","sarm"],
   ["10:30","💊","Tamoxifeno (Citrato) 10mg","1 comprimido · com refeição · desconforto mamário","SEM_15_25","supl"],
   ["13:00","🥩","Almoço — Patinho + Arroz + Feijão + Abóbora + Azeite","670 kcal · 59,4g P","SEMPRE","refeicao"],
+  ["13:00","💊","Metformina 500mg — com almoco","1 capsula · Fase 2 Dia 15-28","METF_FASE2","supl"],
   ["13:00","💊","BCAA 10g · Creatina 5g · Ômega 3 2ª dose","BCAA 10g · Creatina 5g · Ômega 2g","SEMPRE","supl"],
   ["16:00","☕","Café da Tarde — Pão 40g + Café preto","110 kcal","SEMPRE","refeicao"],
   ["16:00","🌿","Berberina — 2ª dose","1 cápsula (500mg)","SEMPRE","supl"],
   ["19:00","🍗","Jantar — Frango + Abóbora + Feijão + Azeite","482 kcal · 57,4g P","SEMPRE","refeicao"],
+  ["19:00","💊","Metformina 500mg — com jantar","1 capsula · Fase 1 Dia 1-14 · desde 05/06/2026","SEMPRE","supl"],
   ["19:00","🌙","L-Glutamina 5g · ZMA","Glut 5g + ZMA 1 dose · estômago vazio","SEMPRE","supl"],
   ["20:30","💈","Minoxidil 5% — 2ª + RU58841 50mg","1 mL + 50mg · tópico","SEMPRE","capilar"],
   ["Seg+Qui","💉","Durateston 0,5mL — IM glúteo","Durateston 125mg · 0,5mL · seringa 3mL · 23G 1.5","SEG_QUI","inj"],
@@ -562,6 +567,8 @@ function isAtivo(tag, sem, isSegQui){
     case 'SEM_12_25': return sem>=12&&sem<=25;
     case 'SEM_18_20': return sem>=18&&sem<=20;
     case 'SEM_15_25': return sem>=15&&sem<=25;
+    case 'METF_FASE2': return sem>=17;
+    case 'METF_FASE2': return sem>=17;
     case 'SEG_QUA_SEX': return (dow===1||dow===3||dow===5);
     case 'SEM_21_25': return sem>=21&&sem<=25;
     default: return false;
