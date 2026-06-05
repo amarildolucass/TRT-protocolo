@@ -920,14 +920,12 @@ setTimeout(()=>{ atualizarDosesHoje(loadConfig()); }, 100);
 
 // ── IMPRESSÃO / PDF ──────────────────────────────────────────────────────────
 function imprimirHoje(){
-  // Criar janela de impressão com os itens ativos
   const sem = getSemAtual();
   const now = new Date();
-  const dow = now.getDay(); // 0=dom,1=seg
+  const dow = now.getDay();
   const isSegQui = (dow===1||dow===4);
   const isSegQuaSex = (dow===1||dow===3||dow===5);
   const diasSem = ['Domingo','Segunda','Terca','Quarta','Quinta','Sexta','Sabado'];
-
   const ativos = ROTINA.filter(([h,e,p,d,tag,cat])=>isAtivo(tag,sem,isSegQui));
 
   let grupos = {};
@@ -944,47 +942,55 @@ function imprimirHoje(){
 
   let rows = '';
   Object.entries(grupos).forEach(([hora,items])=>{
-    rows += `<tr class="sep"><td colspan="3">${hora}</td></tr>`;
+    rows += `<tr style="background:#1F3864"><td colspan="3" style="padding:4px 8px;color:white;font-weight:bold;font-size:9pt">${hora}</td></tr>`;
     items.forEach(({h,e,p,d,cat})=>{
       const cor = corCat[cat]||'#333';
-      rows += `<tr>
-        <td class="hora" style="color:white;background:${cor}">${h}</td>
-        <td class="prod" style="color:${cor}">${e} ${p}</td>
-        <td class="dose">${d}</td>
+      const bg = cat==='inj'?'#F3E8FF':cat==='alerta'?'#FDECEA':cat==='refeicao'?'#E8F5E9':cat==='treino'?'#EBF5FB':'#F5F5F5';
+      rows += `<tr style="background:${bg}">
+        <td style="width:70px;padding:4px 6px;color:white;background:${cor};font-size:8pt;font-weight:bold;text-align:center">${h}</td>
+        <td style="padding:4px 8px;font-size:9pt;font-weight:bold;color:${cor}">${e} ${p}</td>
+        <td style="padding:4px 8px;font-size:8pt;color:#555">${d}</td>
       </tr>`;
     });
   });
 
-  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
-  <title>Agenda ${now.toLocaleDateString('pt-BR')}</title>
-  <style>
-    body{font-family:Arial,sans-serif;font-size:9pt;margin:1cm}
-    h2{font-size:13pt;margin:0;color:#0D1B2A}
-    .sub{font-size:8pt;color:#00C896;margin-bottom:8px}
-    table{width:100%;border-collapse:collapse}
-    tr.sep td{background:#1F3864;color:white;font-weight:bold;
-              font-size:9pt;padding:3px 6px}
-    td{padding:3px 6px;border-bottom:1px solid #eee;vertical-align:middle}
-    td.hora{width:80px;font-size:8pt;font-weight:bold;text-align:center}
-    td.prod{font-size:8.5pt;font-weight:bold;width:55%}
-    td.dose{font-size:7.5pt;color:#555}
-    .footer{margin-top:8px;padding:5px;background:#FFF3E0;
-            font-size:7pt;color:#B71C1C;border:1px solid #FFCDD2}
-    .kcal{margin-top:4px;padding:4px;background:#E3F2FD;
-          font-size:7.5pt;color:#1F3864;text-align:center}
-    @media print{body{margin:0.5cm}}
-  </style></head><body>
-  <h2>AGENDA DO DIA — TRT PROTOCOLO v10</h2>
-  <div class="sub">${now.toLocaleDateString('pt-BR')} (${diasSem[dow]})  ·  Semana ${sem}/25  ·  Restam ${Math.max(0,Math.floor((new Date(2026,7,23)-now)/86400000))} dias${isSegQui?' · 💉 DIA DE INJECAO':''}${isSegQuaSex?' · 💉 hCG HOJE':''}</div>
-  <table>${rows}</table>
-  <div class="footer">ALERTAS: PA>140/90 reduzir cafeina  |  TGP>120 (YK-11) PARAR  |  Ht>52% doacao de sangue</div>
-  <div class="kcal"><b>1.778 kcal</b>  ·  Proteina: 184g  ·  Carboidrato: 164g  ·  Gordura: 50g</div>
-  </body></html>`;
+  const restam = Math.max(0,Math.floor((FIM-now)/(1000*60*60*24)));
+  const inj_txt = isSegQui ? ' · 💉 DIA DE INJECAO' : '';
+  const hcg_txt = isSegQuaSex ? ' · 💉 hCG HOJE' : '';
 
-  const w = window.open('','_blank','width=800,height=900');
-  w.document.write(html);
-  w.document.close();
-  setTimeout(()=>w.print(), 500);
+  const conteudo = `
+    <div style="font-family:Arial,sans-serif;padding:16px;max-width:800px;margin:0 auto">
+      <div style="background:#0D1B2A;color:white;padding:10px 14px;border-radius:8px;margin-bottom:12px">
+        <div style="font-size:13pt;font-weight:bold">AGENDA DO DIA — TRT PROTOCOLO v10</div>
+        <div style="font-size:9pt;color:#00C896;margin-top:3px">
+          ${now.toLocaleDateString('pt-BR')} (${diasSem[dow]})  ·  Semana ${sem}/25  ·  Restam ${restam} dias${inj_txt}${hcg_txt}
+        </div>
+      </div>
+      <table style="width:100%;border-collapse:collapse;margin-bottom:10px">${rows}</table>
+      <div style="background:#FDECEA;padding:8px 12px;border-radius:6px;font-size:8pt;color:#B71C1C;margin-bottom:6px">
+        <b>ALERTAS:</b> PA&gt;140/90 reduzir cafeina · TGP&gt;120 (YK-11) PARAR · Ht&gt;52% doar sangue
+      </div>
+      <div style="background:#E3F2FD;padding:8px 12px;border-radius:6px;font-size:8.5pt;color:#1F3864;text-align:center">
+        <b>1.778 kcal</b> · Proteina: 184g · Carboidrato: 164g · Gordura: 50g
+      </div>
+      <div style="text-align:center;margin-top:14px">
+        <button onclick="document.getElementById('print-overlay').remove()" 
+          style="padding:10px 24px;background:#546E7A;color:white;border:none;border-radius:8px;font-size:11pt;cursor:pointer;margin-right:10px">
+          ✕ Fechar
+        </button>
+        <button onclick="window.print()" 
+          style="padding:10px 28px;background:#C0392B;color:white;border:none;border-radius:8px;font-size:11pt;font-weight:bold;cursor:pointer">
+          🖨️ Imprimir / PDF
+        </button>
+      </div>
+    </div>`;
+
+  // Criar overlay direto na página — funciona em celular sem popup
+  const overlay = document.createElement('div');
+  overlay.id = 'print-overlay';
+  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:white;z-index:9999;overflow-y:auto;color:#000';
+  overlay.innerHTML = conteudo;
+  document.body.appendChild(overlay);
 }
 
 </script>
